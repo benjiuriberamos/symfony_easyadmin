@@ -12,9 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/app-auth")
- */
+
+#[Route('/app-auth')]
 class AppAuthController extends BaseSimpleController
 {
     /**
@@ -29,9 +28,7 @@ class AppAuthController extends BaseSimpleController
         $this->manager = $manager;
     }
 
-    /**
-     * @Route("/", name="sd_admin_app_auth", methods={"GET", "POST"})
-     */
+    #[Route('/', name: 'sd_admin_app_auth', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
         return parent::init($request);
