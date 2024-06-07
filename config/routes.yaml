@@ -4,9 +4,9 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-web:
-    resource: '../src/Controller/Front'
-    type: annotation
+#web:
+#    resource: '../src/Controller/Front'
+#    type: annotation
 
 api:
     resource: '../src/Controller/Api'
