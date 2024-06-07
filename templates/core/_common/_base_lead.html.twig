@@ -1,0 +1,95 @@
+{% extends 'core/_common/_base.html.twig' %}
+
+{% block css_aditional %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('sd_admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('sd_admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('sd_admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Exportar</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ path('sd_admin_' ~ model|slug ~ '_export') }}" method="post" class="row g-3">
+                        <div class="col-4 col-lg-3">
+                            <div class="form-group">
+                                <label for="export_type" class="form-label">Desde</label>
+                                <select id="export_type" class="form-control" name="export_type">
+                                    <option value="{{ constant('App\\Controller\\Core\\BaseFormController::LAST_DAY') }}">Hoy</option>
+                                    <option value="{{ constant('App\\Controller\\Core\\BaseFormController::LAST_15_DAYS') }}">15 días</option>
+                                    <option value="{{ constant('App\\Controller\\Core\\BaseFormController::LAST_MONTH') }}">Último mes</option>
+                                    <option value="{{ constant('App\\Controller\\Core\\BaseFormController::LAST_6_MONTHS') }}">6 Meses</option>
+                                    <option value="{{ constant('App\\Controller\\Core\\BaseFormController::LAST_YEAR') }}">Último año</option>
+                                    <option value="{{ constant('App\\Controller\\Core\\BaseFormController::LAST_CUSTOM') }}" selected>Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4 col-lg-3 export_to_hide">
+                            <label for="start_date" class="form-label">Inicio</label>
+                            <input type="text" class="form-control datepicker" id="start_date" name="start_date">
+                        </div>
+                        <div class="col-4 col-lg-3 export_to_hide">
+                            <label for="start_end" class="form-label">Fin</label>
+                            <input type="text" class="form-control datepicker" id="start_end" name="start_end">
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary">
+                                <i class="fa fa-plus-circle"></i>
+                                Exportar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div id="sd-datatable">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border m-5" style="width: 3rem; height: 3rem;" role="status">
+                                <span class="sr-only">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_aditional %}
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/js/custom/select2.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/moment/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/moment/locale/es.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/js/custom/datetimepicker.js') }}"></script>
+    <script type="text/javascript">
+        const DATATABLE_SETTINGS = {{ datatable_settings(datatable) }};
+    </script>
+{% endblock %}
+
+{% block js_custom %}
+    <script type="text/javascript" src="{{ asset('sd_admin/js/custom/datatable.js') }}"></script>
+    <script type="text/javascript">
+        $('select#export_type').on('change', function () {
+            const value = $(this).val();
+            const custom_type = '{{ constant('App\\Controller\\Core\\BaseFormController::LAST_CUSTOM') }}';
+            const select = $('.export_to_hide');
+            if (value === custom_type) {
+                $('#start_date').val('');
+                $('#start_end').val('');
+                select.show();
+                return;
+            }
+            select.hide();
+        });
+    </script>
+{% endblock %}

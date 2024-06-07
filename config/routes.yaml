@@ -1,0 +1,32 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+web:
+    resource: '../src/Controller/Front'
+    type: annotation
+
+api:
+    resource: '../src/Controller/Api'
+    type: annotation
+    prefix: '/api'
+
+app:
+    resource: '../src/Controller/App'
+    type: annotation
+    prefix: '/app/admin'
+
+admin:
+    resource: '../src/Controller/Admin'
+    type: annotation
+    prefix: '/admin'
+
+core:
+    resource: '../src/Controller/Core'
+    type: annotation
+
+kernel:
+    resource: '../src/Kernel.php'
+    type: annotation

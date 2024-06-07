@@ -1,0 +1,111 @@
+<div class="modal fade" id="gallerybrowser" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Galería de imágenes</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <!-- tool box -->
+                    <div class="card-header" id="tools">
+                        <button class="btn btn-primary" id="upload-button"><i class="fas fa-upload"></i> Subir</button>
+                        <button class="btn btn-primary" id="new-folder-button"><i class="far fa-folder"></i> Nueva Carpeta</button>
+                        <button class="btn btn-primary" id="refresh-button"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="card-body">
+                        <!-- breadcrumb -->
+                        <ol class="breadcrumb" id="breadcrumb"></ol>
+                        <!-- file manager view -->
+                        <table class="table table-hover table-condensed" id="filemanager"></table>
+                        <!-- message box -->
+                        <div id="msgbox"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Creates the bootstrap modal where the image will appear -->
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Cerrar</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Vista Previa</h4>
+            </div>
+            <div class="modal-body text-center">
+                <center>
+                    <img src="" id="imagepreview" class="img-responsive" style="max-height:400px">
+                </center>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- new modal -->
+<div class="modal fade" id="new" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="#" method="post">
+                <div class="modal-header">
+                    <h3>Nueva carpeta</h3>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="new-type" />
+                    <label for="new-path">Ingrese un nombre</label>
+                    <input type="text" class="form-control" id="new-path" />
+                </div>
+                <div class="modal-footer">
+                    <button class="submit btn btn-primary" type="submit"><i class="fa fa-check"></i></button>
+                    <button class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- remove modal -->
+<div class="modal fade" id="remove" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Eliminar</h3>
+            </div>
+            <div class="modal-body">
+                <label for="remove-path">Eliminar este archivo / carpeta</label>
+                <input type="text" class="form-control" id="remove-path" disabled />
+            </div>
+            <div class="modal-footer">
+                <button class="submit btn btn-primary" data-dismiss="modal"><i class="fa fa-check"></i></button>
+                <button class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- upload modal -->
+<div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Subir archivos</h3>
+            </div>
+            <div class="modal-body">
+                <form action="{{ path('sd_admin_filemanager_upload') }}" class="dropzone filebrowser_dropzone" id="filebrowser_dropzone">
+                    <input id="upload-path" type="hidden" name="data" value="">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

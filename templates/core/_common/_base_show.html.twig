@@ -1,0 +1,24 @@
+{% extends 'core/_common/_base.html.twig' %}
+
+{% block breadcrumb %}
+    {% if model is defined %}
+        <div class="breadcrumb float-sm-right">
+            <a href="{{ path('sd_admin_' ~ model|slug) }}" class="btn btn-icon">
+                <i class="fa fa-angle-left"></i>
+                Regresar
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

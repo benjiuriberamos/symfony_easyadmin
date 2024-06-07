@@ -1,0 +1,10 @@
+<a class="btn btn-primary btn-action btn-sm mr-1" href="{{ path('sd_admin_' ~ model|slug ~ '_show', {'id': context.id}) }}" data-toggle="tooltip" title="Ver">
+    <i class="fas fa-eye"></i> Ver
+</a>
+<div class="btn btn-danger btn-action btn-sm mr-1" data-toggle="tooltip" title="Elimnar" data-modal-delete data-modal-title="¿Estás seguro?" data-modal-body="Esta acción no se puede deshacer. ¿Quieres continuar?" data-modal-confirm-text-yes="Sí" data-modal-confirm-text-cancel="Cancelar">
+    <form action="{{ path('sd_admin_' ~ model|slug ~ '_delete', {'id': context.id}) }}" method="POST" class="d-none">
+        <input type='hidden' name='_method' value='DELETE'>
+        <input type="hidden" name="_token" value="{{ csrf_token(model|slug) }}">
+    </form>
+    <i class="fas fa-trash"></i> Eliminar
+</div>

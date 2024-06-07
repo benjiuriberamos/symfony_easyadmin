@@ -1,0 +1,126 @@
+{% form_theme form 'core/_common/_theme.html.twig' %}
+
+{% extends 'core/_common/_base.html.twig' %}
+
+{% block css_aditional %}
+    <link rel="stylesheet" href="{{ asset('sd_admin/plugins/dropzone/min/dropzone.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('sd_admin/plugins/codemirror/codemirror.css') }}">
+    <link rel="stylesheet" href="{{ asset('sd_admin/plugins/codemirror/theme/material-darker.css') }}">
+    <link rel="stylesheet" href="{{ asset('sd_admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+{% endblock %}
+
+{% block breadcrumb %}
+    {% if model is defined %}
+        <div class="breadcrumb float-sm-right">
+            <a href="{{ path('sd_admin_' ~ model|slug) }}" class="btn btn-icon">
+                <i class="fa fa-angle-left"></i>
+                Regresar
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            {{ form_start(form, {'attr': {'id': 'sd-form', 'class': 'sd-needs-validation', 'novalidate': 'novalidate'}}) }}
+            {% block form_content %}{% endblock %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="buttons">
+                        {% if form.return is defined %}
+                            {{ form_widget(form.return) }}
+                        {% endif %}
+                        {{ form_widget(form.submit) }}
+                        {% if delete_form is defined %}
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#form_delete">
+                                <i class="fa fa-trash"></i>
+                                <span class="hidden-xs"> Eliminar</span>
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block html_aditional %}
+    {% include 'core/_common/_filebrowser.html.twig' %}
+    {% if delete_form is defined %}
+        <div class="modal fade" id="form_delete" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Eliminar</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Está seguro que desea eliminar esta información?
+                    </div>
+                    <div class="modal-footer">
+                        {{ form_start(delete_form) }}
+                        {{ form_widget(delete_form.submit, {'label': 'Definitivamente', 'attr': {'class': 'btn btn-danger'}} ) }}
+                        <a type="button" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+                        {{ form_end(delete_form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block js_aditional %}
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/jquery.collection.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/ckeditor/build/ckeditor.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/js/custom/ckeditor.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/dropzone/min/dropzone.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/js/custom/select2.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/codemirror/codemirror.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/codemirror/mode/javascript/javascript.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/codemirror/mode/htmlmixed/htmlmixed.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/js/custom/codemirror.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/moment/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/moment/locale/es.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/js/custom/datetimepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('sd_admin/js/custom/validation.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.collection').collection({
+                up: '<a href="#" class="collection-up btn btn-light" title="Move element up"><span class="fa fa-arrow-up"></span></a>',
+                down: '<a href="#" class="collection-down btn btn-light" title="Move element down"><span class="fa fa-arrow-down"></span></a>',
+                remove: '<a href="#" class="collection-remove btn btn-light" title="Delete element"><span class="fa fa-trash"></span></a>',
+                add: '<a href="#" class="collection-add btn btn-light" title="Add element"><span class="fa fa-plus-circle"></span></a>',
+                duplicate: '<a href="#" class="collection-duplicate btn btn-light" title="Duplicate element"><span class="fa fa-th-large"></span></a>',
+                allow_duplicate: true,
+                elements_selector: 'li.list-group-item',
+                elements_parent_selector: '%id% ul.list-group',
+                after_add: function(collection, element) { 
+                    $('.select2').select2();
+                    return true; 
+                },
+
+            });
+        });
+    </script>
+    <script>
+        Dropzone.autoDiscover = false;
+        const pathListFilemanager = '{{ path('sd_admin_filemanager_list') }}';
+        const pathCreateFolderFilemanager = '{{ path('sd_admin_filemanager_create_folder') }}';
+        const pathUploadFile = '{{ path('sd_admin_filemanager_upload') }}';
+        const pathDeleteFilemanager = '{{ path('sd_admin_filemanager_delete') }}';
+        const asset_url = '{{ asset('') }}';
+        let PATH;
+    </script>
+
+{% endblock %}
+
+{% block js_custom %}
+    <script src="{{ asset('sd_admin/js/custom/filemanager.js') }}"></script>
+    {% block js %}
+    {% endblock %}
+{% endblock %}

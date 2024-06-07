@@ -1,0 +1,81 @@
+{% macro row(name, value, is_html = false) %}
+    <div class="form-group">
+        <label class="col-sm-4 control-label">
+            <strong>{{ name }}:</strong>
+        </label>
+        <div class="col-sm-10">
+            {% if is_html %}
+                {{ value|raw }}
+            {% else %}
+                {{ value|nl2br }}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro block(blocks) %}
+    <div class="row">
+        {% for block in blocks %}
+            {{ block }}
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro column(data, cols = [12]) %}
+    {% set classes = '' %}
+    {% for item in cols %}
+        {% set classes = classes ~ 'col-' ~ item ~ ' ' %}
+    {% endfor %}
+    <div class="{{ classes }}">
+        {{ data }}
+    </div>
+{% endmacro %}
+
+{% macro table(data) %}
+    <div class="table-responsive">
+        <table class="table">
+            {{ data }}
+        </table>
+    </div>
+{% endmacro %}
+
+{% macro table_title(text, padding_top = true) %}
+    <tr>
+        <td colspan="2" style="padding: 0;border-top: 0;">
+            {% if text %}
+                <p class="lead_title {{ padding_top ? 'pt' }}"><strong>{{ text }}</strong></p>
+            {% else %}
+                <br>
+            {% endif %}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro table_row(name, value, is_html = false) %}
+    <tr>
+        <th>{{ name }}:</th>
+        <td>
+            {% if is_html %}
+                {{ value|raw }}
+            {% else %}
+                {{ value|nl2br }}
+            {% endif %}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro title(text, padding_top = true) %}
+    <p class="lead_title {{ padding_top ? 'pt' }}"><strong>{{ text }}</strong></p>
+{% endmacro %}
+
+{% macro file(file, text) %}
+    {% if file %}
+        <a href="{{ absolute_url(asset(file)) }}" target="_blank">{{ text ?: 'Descargar' }}</a>
+    {% else %}
+        --
+    {% endif %}
+{% endmacro %}
+
+{% macro link(url, text, external = true) %}
+    <a href="{{ external ? url|external_url : url }}" target="_blank">{{ text ?: url }}</a>
+{% endmacro %}

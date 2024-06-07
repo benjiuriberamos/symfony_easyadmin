@@ -1,0 +1,212 @@
+{% extends 'bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block collection_widget %}
+    {% apply spaceless %}
+        {% if prototype is defined %}
+            {% set new_prototype = '
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-9">' ~ form_widget(prototype) ~ '</div>
+                        <div class="col-md-3">
+                            <a href="#" class="collection-up btn btn-light" title="Move element up"><span class="fa fa-arrow-up"></span></a>
+                            <a href="#" class="collection-down btn btn-light" title="Move element down"><span class="fa fa-arrow-down"></span></a>
+                            <a href="#" class="collection-remove btn btn-light" title="Delete element"><span class="fa fa-trash"></span></a>
+                            <a href="#" class="collection-add btn btn-light" title="Add element"><span class="fa fa-plus-circle"></span></a>
+                            <a href="#" class="collection-duplicate btn btn-light" title="Duplicate element"><span class="fa fa-th-large"></span></a>
+                        </div>
+                    </div>
+                </li>'
+            %}
+            {% set attr = attr|merge({'data-prototype': new_prototype}) %}
+            {% set attr = attr|merge({'data-prototype-name': prototype.vars.name}) %}
+        {% endif %}
+
+        {% set attr = attr|merge({'data-allow-add': allow_add ? 1 : 0}) %}
+        {% set attr = attr|merge({'data-allow-remove': allow_delete ? 1 : 0 }) %}
+        {% set attr = attr|merge({'data-name-prefix': full_name}) %}
+        <div {{ block('widget_container_attributes') }} class="collection">
+            <ul class="list-group">
+                {{ block('collection_item_widget') }}
+                {{ form_rest(form) }}
+            </ul>
+        </div>
+    {% endapply %}
+{% endblock collection_widget %}
+
+{% block collection_item_widget %}
+    {% apply spaceless %}
+        {% for child in form %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-9">
+                        {{ form_widget(child) }}
+                    </div>
+                    <div class="col-md-3">
+                        <a href="#" class="collection-up btn btn-light" title="Move element up"><span class="fa fa-arrow-up"></span></a>
+                        <a href="#" class="collection-down btn btn-light" title="Move element down"><span class="fa fa-arrow-down"></span></a>
+                        <a href="#" class="collection-remove btn btn-light" title="Delete element"><span class="fa fa-trash"></span></a>
+                        <a href="#" class="collection-add btn btn-light" title="Add element"><span class="fa fa-plus-circle"></span></a>
+                        <a href="#" class="collection-duplicate btn btn-light" title="Duplicate element"><span class="fa fa-th-large"></span></a>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    {% endapply %}
+{% endblock collection_item_widget %}
+
+{% block filebrowser_widget %}
+    {% apply spaceless %}
+        {% set path = value|image_path %}
+        {% set alt = value|image_alt %}
+        {% set f_id = form.children.path.vars.id %}
+        <div class="media" id="t_{{ f_id }}">
+            {{ form_widget(form.children.path) }}
+            {{ form_widget(form.children.alt) }}
+            <div class="media-body">
+                <p class="image_name {{ not path ? 'd-none' }}">{{ path }}</p>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-light open-filebrowser" data-return="{{ f_id }}">
+                        <i class="fa fa-list"></i>
+                        <span class="hidden-xs"> Ver galería</span>
+                    </button>
+                    <button type="button" class="btn btn-light fancybox {% if not path or path|extension not in ['png', 'gif', 'jpg', 'jpeg', 'svg'] %}d-none{% endif %}" data-fancybox name="button" href="{% if path %}{{ asset(path) }}{% endif %}">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                    <button type="button" class="btn btn-light list {% if not path %}d-none{% endif %}" name="button" data-id="{{ f_id }}">
+                        <i class="fa fa-list"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger trash {% if not path %}d-none{% endif %}" name="button" data-id="{{ f_id }}">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endapply %}
+{% endblock %}
+
+{% block summernote_widget %}
+    {% if attr.toolbar == 'simple' %}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ 'summernote-simple')|trim}) %}
+    {% elseif attr.toolbar == 'full' %}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ 'summernote-full')|trim}) %}
+    {% else %}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ 'summernote')|trim}) %}
+    {% endif %}
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+{% endblock summernote_widget %}
+
+{% block ckeditor_widget %}
+    {% if attr.toolbar == 'simple' %}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ 'ckeditor ckeditor-simple')|trim}) %}
+    {% elseif attr.toolbar == 'full' %}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ 'ckeditor ckeditor-full')|trim}) %}
+    {% else %}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ 'ckeditor ckeditor-custom')|trim}) %}
+    {% endif %}
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+    <script>
+        if (typeof createCkeditor === 'function') {
+            createCkeditor('{{ id }}');
+        }
+    </script>
+{% endblock ckeditor_widget %}
+
+{% block date_widget %}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ 'datepicker')|trim, 'data-toggle': 'datetimepicker', 'data-target': '#' ~ id}) %}
+    {{ parent() }}
+{% endblock date_widget %}
+
+{% block codemirror_widget %}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ 'codemirror')|trim}) %}
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+{% endblock codemirror_widget %}
+
+{% block choice_widget %}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ 'select2')|trim}) %}
+    {% if expanded %}
+        {{ block('choice_widget_expanded') }}
+    {% else %}
+        {{ block('choice_widget_collapsed') }}
+    {% endif %}
+{% endblock choice_widget %}
+
+{% block form_errors %}
+    {% if errors|length > 0 %}
+        <div class="{% if form is not rootform %}invalid-feedback{% else %}alert alert-danger{% endif %} d-block">
+            {% for error in errors %}
+                <span class="d-block">
+                    <span class="form-error-message">{{ error.message }}</span>
+                </span>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock form_errors %}
+
+{% block form_label %}
+    {% if label is same as(false) %}
+        <div class="{{ block('form_label_class') }}"></div>
+    {% else %}
+        {% if expanded is not defined or not expanded %}
+            {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' col-form-label')|trim}) %}
+        {% endif %}
+        {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ block('form_label_class'))|trim}) %}
+        {% if label is not same as(false) %}
+            {% set label_attr = label_attr|merge({for: id}) %}
+            {% if required %}
+                {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) %}
+            {% endif %}
+            {% if label is empty %}
+                {% if label_format is not empty %}
+                    {% set label = label_format|replace({
+                        '%name%': name,
+                        '%id%': id,
+                    }) %}
+                {% else %}
+                    {% set label = name|humanize %}
+                {% endif %}
+            {% endif %}
+            <{{ element|default('label') }}
+                {% if label_attr %}
+                    {% with { attr: label_attr } %}
+                        {{ block('attributes') }}
+                    {% endwith %}
+                {% endif %}>
+                {% if translation_domain is same as(false) %}
+                    {% if label_html is same as(false) %}
+                        {{ label }}
+                    {% else %}
+                        {{ label|raw }}
+                    {% endif %}
+                {% else %}
+                    {% if label_html is same as(false) %}
+                        {{ label|trans(label_translation_parameters, translation_domain) }}
+                    {% else %}
+                        {{ label|trans(label_translation_parameters, translation_domain)|raw }}
+                    {% endif %}
+                {% endif %}
+                {% if required %}
+                    {{ ' (*)' }}
+                {% endif %}
+            </{{ element|default('label') }}>
+        {% endif %}
+    {% endif %}
+{% endblock form_label %}
+
+{% block form_row %}
+    {% if expanded is defined and expanded %}
+        {{ block('fieldset_form_row') }}
+    {% else %}
+        {% set widget_attr = {} %}
+        {% if help is not empty %}
+            {% set widget_attr = {attr: {'aria-describedby': id ~"_help"}} %}
+        {% endif %}
+        <div{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group row' ~ ((not compound or force_error|default(false)) and not valid ? ' is-invalid'))|trim})} %}{{ block('attributes') }}{% endwith %}>
+            {{ form_label(form) }}
+            <div class="{{ block('form_group_class') }}">
+                {{ form_widget(form, widget_attr) }}
+                {{ form_errors(form) }}
+                {{ form_help(form) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock form_row %}

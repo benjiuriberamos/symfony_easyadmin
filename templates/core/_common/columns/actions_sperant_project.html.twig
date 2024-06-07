@@ -1,0 +1,11 @@
+{% if context.getSperantProjectId %}
+    <a class="btn btn-default btn-action btn-sm mr-1" href="{{ path('sp_project_sync_subdivisions', {'id': context.id}) }}" data-toggle="tooltip" title="Sincronizar Subdivisiones">
+        <i class="fa fa-sync-alt"></i> Subdivisiones
+    </a>
+    <a class="btn btn-default btn-action btn-sm mr-1" href="{{ path('sp_project_sync_types', {'id': context.id}) }}" data-toggle="tooltip" title="Sincronizar Tipologías">
+        <i class="fa fa-sync-alt"></i> Tipologías
+    </a>
+    <a class="btn btn-primary btn-action btn-sm mr-1" href="{{ path('sp_project_sync_units', {'id': context.id}) }}" data-toggle="tooltip" title="Sincronizar Unidades">
+        <i class="fa fa-sync-alt"></i> Unidades
+    </a>
+{% endif %}
